@@ -41,7 +41,7 @@ The components or "UI tools" that Tambo can use are registered in `src/lib/tambo
 For example, see how the `supabaseProjectList` component is registered with tambo:
 
 ```tsx title="src/lib/tambo.ts"
-const tamboComponents: TamboComponent[] = [
+const components: TamboComponent[] = [
   {
     name: "supabaseProjectList",
     description:
