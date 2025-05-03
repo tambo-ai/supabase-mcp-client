@@ -1,11 +1,11 @@
 "use client";
-import { useTambo } from "@tambo-ai/react";
+import { TamboTool, useTambo } from "@tambo-ai/react";
 import { Loader2 } from "lucide-react";
 import { useEffect, useState } from "react";
 
 interface CanvasSpaceProps {
   isInitializing?: boolean;
-  tools?: any[];
+  tools?: TamboTool[];
 }
 
 export const CanvasSpace = ({

@@ -2,13 +2,13 @@
 import { CanvasSpace } from "@/components/ui/canvas-space";
 import { MessageThreadFull } from "@/components/ui/message-thread-full";
 import { initMCPTools } from "@/services/mcp-service";
-import { useTambo } from "@tambo-ai/react";
+import { TamboTool, useTambo } from "@tambo-ai/react";
 import { useEffect, useState } from "react";
 
 export default function Home() {
   const { registerTools } = useTambo();
   const [isInitializing, setIsInitializing] = useState(true);
-  const [tools, setTools] = useState<any[]>([]);
+  const [tools, setTools] = useState<TamboTool[]>([]);
 
   useEffect(() => {
     const initializeMCP = async () => {
