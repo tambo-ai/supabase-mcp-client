@@ -8,14 +8,16 @@ import { useEffect, useState } from "react";
 export default function Home() {
   const { registerTools } = useTambo();
   const [isInitializing, setIsInitializing] = useState(true);
+  const [tools, setTools] = useState<any[]>([]);
 
   useEffect(() => {
     const initializeMCP = async () => {
       // Initialize MCP server and fetch tool definitions
       try {
         setIsInitializing(true);
-        const tools = await initMCPTools();
-        registerTools(tools);
+        const fetchedTools = await initMCPTools();
+        setTools(fetchedTools);
+        registerTools(fetchedTools);
       } catch (error) {
         console.error("Failed to initialize MCP:", error);
       } finally {
@@ -35,7 +37,7 @@ export default function Home() {
       </div>
 
       <div className="flex-1 bg-white p-10">
-        <CanvasSpace isInitializing={isInitializing} />
+        <CanvasSpace isInitializing={isInitializing} tools={tools} />
       </div>
     </div>
   );

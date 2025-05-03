@@ -5,9 +5,13 @@ import { useEffect, useState } from "react";
 
 interface CanvasSpaceProps {
   isInitializing?: boolean;
+  tools?: any[];
 }
 
-export const CanvasSpace = ({ isInitializing = false }: CanvasSpaceProps) => {
+export const CanvasSpace = ({
+  isInitializing = false,
+  tools = [],
+}: CanvasSpaceProps) => {
   const { thread } = useTambo();
   const [lastRenderedComponent, setLastRenderedComponent] =
     useState<React.ReactNode | null>(null);
@@ -30,7 +34,18 @@ export const CanvasSpace = ({ isInitializing = false }: CanvasSpaceProps) => {
             </div>
           ) : (
             lastRenderedComponent || (
-              <span className="text-gray-500">ready</span>
+              <div className="space-y-2 text-gray-700">
+                <details className="cursor-pointer">
+                  <summary className="hover:text-gray-900">
+                    MCP tools ready
+                  </summary>
+                  <div className="mt-2 ml-4 space-y-1">
+                    {tools.map((tool, index) => (
+                      <div key={index}>{tool.name}</div>
+                    ))}
+                  </div>
+                </details>
+              </div>
             )
           )}
         </div>
