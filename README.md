@@ -4,7 +4,7 @@ A NextJS app showing how Supabase MCP tools and UI tools can be added to a React
 
 ![Demo GIF](assets/supabase-mcp-client-short.gif)
 
-[Tambo](https://tambo.co) is a tool that lets you define and register your React components as "UI tools" that an LLM can use.
+[Tambo](https://tambo.co) is a tool that lets you define and register your React components as UI tools that an LLM can use.
 
 [Supabase MCP](https://github.com/supabase-community/supabase-mcp) is an MCP server that provides tool definitions for interacting with Supabase that an LLM can use.
 
