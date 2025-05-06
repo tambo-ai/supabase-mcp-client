@@ -1,11 +1,20 @@
 import { Client } from "@modelcontextprotocol/sdk/client/index.js";
 import { StdioClientTransport } from "@modelcontextprotocol/sdk/client/stdio.js";
+import { Server } from "@modelcontextprotocol/sdk/server/index.js";
+import { proxyServer } from "mcp-proxy";
 import { NextResponse } from "next/server";
 
 let mcpClient: Client | null = null;
 
+const server = new Server({
+  name: "mcp",
+  version: "1.0.0",
+  capabilities: {},
+});
+
 async function initializeMCP() {
   if (!mcpClient) {
+    //setup supabase mcp server and proxy so we can use SSE transport
     mcpClient = new Client({ name: "mcp", version: "1.0.0" });
     const transport = new StdioClientTransport({
       command: "npx",
@@ -17,6 +26,11 @@ async function initializeMCP() {
       ],
     });
     await mcpClient.connect(transport);
+    proxyServer({
+      server,
+      client: mcpClient,
+      serverCapabilities: {},
+    });
   }
   return mcpClient;
 }
