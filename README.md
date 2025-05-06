@@ -10,7 +10,7 @@ A NextJS app showing how Supabase MCP tools and UI tools can be added to a React
 
 ## How it works
 
-- On page load, the app starts a local Supabase MCP server and fetches its tool definitions.
+- On startup a local Supabase MCP server is started, and the app fetches its tool definitions.
 - The app registers the tools with Tambo.
 - The app registers components as "UI tools" with Tambo (see `src/lib/tambo.ts`).
 - When a message is submitted in the chat, it, along with the combined list of tools and components, is sent to Tambo to decide which tools to call and what text or UI to display.
@@ -30,6 +30,7 @@ Your `.env.local` file should look like this:
 ```
 NEXT_PUBLIC_TAMBO_API_KEY=<your tambo api key>
 SUPABASE_ACCESS_TOKEN=<your Supabase personal access token>
+NEXT_PUBLIC_SERVER_PORT=<your port>
 ```
 
 3. Run `npm run dev` and go to `localhost:3000` to use the app!
