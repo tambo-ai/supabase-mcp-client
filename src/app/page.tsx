@@ -1,7 +1,7 @@
 "use client";
 import { CanvasSpace } from "@/components/ui/canvas-space";
 import { MessageThreadFull } from "@/components/ui/message-thread-full";
-import { initMCPTools } from "@/services/mcp-service";
+import { initMCPClient } from "@/services/mcp-service";
 import { TamboTool, useTambo } from "@tambo-ai/react";
 import { useEffect, useState } from "react";
 
@@ -15,9 +15,9 @@ export default function Home() {
       // Initialize MCP server and fetch tool definitions
       try {
         setIsInitializing(true);
-        const fetchedTools = await initMCPTools();
-        setTools(fetchedTools);
-        registerTools(fetchedTools);
+        const fetchedTools = await initMCPClient();
+        // setTools(fetchedTools);
+        // registerTools(fetchedTools);
       } catch (error) {
         console.error("Failed to initialize MCP:", error);
       } finally {
