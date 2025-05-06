@@ -16,6 +16,7 @@
     "@types/express": "^5.0.1",
     "class-variance-authority": "^0.7.1",
     "cors": "^2.8.5",
+    "dotenv": "^16.5.0",
     "express": "^5.1.0",
     "lucide-react": "^0.484.0",
     "mcp-proxy": "^2.13.1",
