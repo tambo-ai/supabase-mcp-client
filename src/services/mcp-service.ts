@@ -16,22 +16,28 @@ export const initMCPClient = async () => {
   if (mcpClient) {
     return mcpClient;
   }
-  const client = new Client(
-    {
-      name: "example-client",
-      version: "1.0.0",
-    },
-    {
-      capabilities: {},
-    }
-  );
+  try {
+    const client = new Client(
+      {
+        name: "example-client",
+        version: "1.0.0",
+      },
+      {
+        capabilities: {},
+      }
+    );
 
-  const transport = new SSEClientTransport(
-    new URL("http://localhost:3003/sse")
-  );
-  await client.connect(transport);
-  mcpClient = client;
-  return client;
+    const transport = new SSEClientTransport(
+      new URL("http://localhost:3003/sse")
+    );
+
+    await client.connect(transport);
+    mcpClient = client;
+    return client;
+  } catch (error) {
+    console.error("Failed to initialize MCP client:", error);
+    throw error;
+  }
 };
 
 export const initMCPTools = async () => {

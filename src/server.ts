@@ -54,9 +54,17 @@ app.get("/sse", (req, res) => {
 });
 
 app.post("/messages", (req, res) => {
+  res.setHeader("Content-Type", "text/event-stream");
+  res.setHeader("Cache-Control", "no-cache");
+  res.setHeader("Connection", "keep-alive");
+  const sessionId = req.query.sessionId as string;
+  if (!sessionId) {
+    console.error("Message received without sessionId");
+    res.status(400).json({ error: "sessionId is required" });
+    return;
+  }
   if (transport) {
-    transport.handlePostMessage(req, res);
-    res.sendStatus(200);
+    transport.handlePostMessage(req, res, req.body);
   } else {
     res.status(500).send("SSE transport not initialized");
   }
