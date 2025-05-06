@@ -6,6 +6,8 @@ import cors from "cors";
 import express from "express";
 import { proxyServer } from "mcp-proxy";
 
+//Proxy server for stdio MCP
+
 const app = express();
 app.use(express.json());
 app.use(
@@ -14,20 +16,10 @@ app.use(
     credentials: true,
   })
 );
-const server = new Server(
-  {
-    name: "supabase-mcp",
-    version: "1.0.0",
-  },
-  {
-    capabilities: {},
-  }
-);
 
 let transport: SSEServerTransport | null = null;
-//setup supabase mcp server and proxy so we can use SSE transport
 
-const mcpClient = new Client({ name: "mcp", version: "1.0.0" });
+const mcpClient = new Client({ name: "supabase-mcp", version: "1.0.0" });
 const stdioTransport = new StdioClientTransport({
   command: "npx",
   args: [
@@ -38,22 +30,34 @@ const stdioTransport = new StdioClientTransport({
   ],
 });
 await mcpClient.connect(stdioTransport);
-proxyServer({
-  server,
-  client: mcpClient,
-  serverCapabilities: {},
-});
+const server = new Server(
+  {
+    name: "supabase-mcp",
+    version: "1.0.0",
+  },
+  {
+    capabilities: mcpClient.getServerCapabilities() as Record<string, unknown>,
+  }
+);
 
-app.get("/sse", (req, res) => {
+app.get("/sse", async (req, res) => {
   res.setHeader("Content-Type", "text/event-stream");
   res.setHeader("Cache-Control", "no-cache");
   res.setHeader("Connection", "keep-alive");
 
   transport = new SSEServerTransport("/messages", res);
-  server.connect(transport);
+  await server.connect(transport);
+  proxyServer({
+    server,
+    client: mcpClient,
+    serverCapabilities: mcpClient.getServerCapabilities() as Record<
+      string,
+      unknown
+    >,
+  });
 });
 
-app.post("/messages", (req, res) => {
+app.post("/messages", async (req, res) => {
   res.setHeader("Content-Type", "text/event-stream");
   res.setHeader("Cache-Control", "no-cache");
   res.setHeader("Connection", "keep-alive");
@@ -64,13 +68,13 @@ app.post("/messages", (req, res) => {
     return;
   }
   if (transport) {
-    transport.handlePostMessage(req, res, req.body);
+    await transport.handlePostMessage(req, res, req.body);
   } else {
     res.status(500).send("SSE transport not initialized");
   }
 });
 
-const PORT = process.env.PORT || 3003;
+const PORT = process.env.NEXT_PUBLIC_SERVER_PORT || 3003;
 app.listen(PORT, () => {
   console.log(`Server running on port ${PORT}`);
 });

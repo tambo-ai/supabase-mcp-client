@@ -30,6 +30,7 @@ Your `.env.local` file should look like this:
 ```
 NEXT_PUBLIC_TAMBO_API_KEY=<your tambo api key>
 SUPABASE_ACCESS_TOKEN=<your Supabase personal access token>
+NEXT_PUBLIC_SERVER_PORT=<your port>
 ```
 
 3. Run `npm run dev` and go to `localhost:3000` to use the app!
