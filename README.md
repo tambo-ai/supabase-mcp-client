@@ -10,10 +10,20 @@ A NextJS app showing how Supabase MCP tools and UI tools can be added to a React
 
 ## How it works
 
-- On startup a local Supabase MCP server is started, and the app fetches its tool definitions.
-- The app registers the tools with Tambo.
+- On startup a local Supabase MCP server is started.
+- The app fetches its tool definitions and registers the tools with Tambo.
 - The app registers components as "UI tools" with Tambo (see `src/lib/tambo.ts`).
 - When a message is submitted in the chat, it, along with the combined list of tools and components, is sent to Tambo to decide which tools to call and what text or UI to display.
+
+To tell Tambo where to find the MCP server, we simply list the URL in [src/app/layout.tsx](src/app/layout.tsx):
+
+```tsx title="src/app/layout.tsx"
+  <TamboMcpProvider
+    mcpServers={[
+      `http://localhost:${process.env.NEXT_PUBLIC_SERVER_PORT}/sse`,
+    ]}
+  >
+```
 
 ## Run locally
 
@@ -36,6 +46,19 @@ NEXT_PUBLIC_SERVER_PORT=<your port>
 3. Run `npm run dev` and go to `localhost:3000` to use the app!
 
 ## Customizing
+
+### Add MCP servers
+
+To add MCP servers, you can add more URLs to the `mcpServers` array in [src/app/layout.tsx](src/app/layout.tsx). Tambo will automatically fetch and use the tool definitions from the MCP servers.
+
+```tsx title="src/app/layout.tsx"
+<TamboMcpProvider
+  mcpServers={[
+    `http://localhost:${process.env.NEXT_PUBLIC_SERVER_PORT}/sse`,
+    "another-mcp-server-url",
+  ]}
+>
+```
 
 ### Change what components Tambo can use
 

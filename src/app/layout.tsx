@@ -1,6 +1,8 @@
 "use client";
 import { components } from "@/lib/tambo";
 import { TamboProvider } from "@tambo-ai/react";
+
+import { TamboMcpProvider } from "@tambo-ai/react/mcp";
 import { Geist, Geist_Mono } from "next/font/google";
 import "./globals.css";
 
@@ -27,8 +29,15 @@ export default function RootLayout({
         <TamboProvider
           apiKey={process.env.NEXT_PUBLIC_TAMBO_API_KEY!}
           components={components}
+          tamboUrl={"http://localhost:3001"}
         >
-          {children}
+          <TamboMcpProvider
+            mcpServers={[
+              `http://localhost:${process.env.NEXT_PUBLIC_SERVER_PORT}/sse`,
+            ]}
+          >
+            {children}
+          </TamboMcpProvider>
         </TamboProvider>
       </body>
     </html>
