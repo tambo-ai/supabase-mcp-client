@@ -1,32 +1,13 @@
 "use client";
 import { CanvasSpace } from "@/components/ui/canvas-space";
 import { MessageThreadFull } from "@/components/ui/message-thread-full";
-import { initMCPTools } from "@/services/mcp-service";
 import { TamboTool, useTambo } from "@tambo-ai/react";
-import { useEffect, useState } from "react";
+import { useState } from "react";
 
 export default function Home() {
   const { registerTools } = useTambo();
   const [isInitializing, setIsInitializing] = useState(true);
   const [tools, setTools] = useState<TamboTool[]>([]);
-
-  useEffect(() => {
-    const initializeMCP = async () => {
-      // Initialize MCP server and fetch tool definitions
-      try {
-        setIsInitializing(true);
-        const fetchedTools = await initMCPTools();
-        setTools(fetchedTools);
-        registerTools(fetchedTools);
-      } catch (error) {
-        console.error("Failed to initialize MCP:", error);
-      } finally {
-        setIsInitializing(false);
-      }
-    };
-
-    initializeMCP();
-  }, [registerTools]);
 
   return (
     <div className="flex h-screen py-6">
