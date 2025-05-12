@@ -27,7 +27,7 @@ To tell Tambo where to find the MCP server, we simply list the URL in [src/app/l
   >
 ```
 
-## Run locally
+## Run locally and connect to your Supabase
 
 1. `npm install`
 
