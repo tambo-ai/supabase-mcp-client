@@ -29,7 +29,6 @@ export default function RootLayout({
         <TamboProvider
           apiKey={process.env.NEXT_PUBLIC_TAMBO_API_KEY!}
           components={components}
-          tamboUrl={"http://localhost:3001"}
         >
           <TamboMcpProvider
             mcpServers={[
