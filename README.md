@@ -1,5 +1,7 @@
 # Supabase MCP Client React App
 
+Conversationally use Supabase!
+
 A NextJS app showing how Supabase MCP tools and UI tools can be added to a React app using [Tambo](https://tambo.co).
 
 ![Demo GIF](assets/supabase-mcp-client-short.gif)
