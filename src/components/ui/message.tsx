@@ -4,7 +4,7 @@ import { createMarkdownComponents } from "@/components/ui/markdownComponents";
 import { cn } from "@/lib/utils";
 import type { TamboThreadMessage } from "@tambo-ai/react";
 import { cva, type VariantProps } from "class-variance-authority";
-import { Check, Loader2 } from "lucide-react";
+import { Check, Loader2, X } from "lucide-react";
 import * as React from "react";
 import ReactMarkdown from "react-markdown";
 
@@ -57,6 +57,32 @@ const bubbleVariants = cva(
   }
 );
 
+/**
+ * Gets the appropriate status message for a tool call
+ *
+ * This function extracts and formats status messages for tool calls based on
+ * the current loading state and available status information.
+ *
+ * @param {TamboThreadMessage} message - The thread message object containing tool call data
+ * @param {boolean | undefined} isLoading - Whether the tool call is currently in progress
+ * @returns {string | null} The formatted status message or null if not a tool call
+ */
+function getToolStatusMessage(
+  message: TamboThreadMessage,
+  isLoading: boolean | undefined
+) {
+  const isToolCall = message.actionType === "tool_call";
+  if (!isToolCall) return null;
+
+  const toolCallMessage = isLoading
+    ? `Calling ${message.toolCallRequest?.toolName ?? "tool"}`
+    : `Called ${message.toolCallRequest?.toolName ?? "tool"}`;
+  const toolStatusMessage = isLoading
+    ? message.component?.statusMessage
+    : message.component?.completionStatusMessage;
+  return toolStatusMessage ?? toolCallMessage;
+}
+
 export interface MessageProps {
   role: "user" | "assistant";
   content: string | { type: string; text?: string }[];
@@ -86,6 +112,9 @@ const Message = React.forwardRef<HTMLDivElement, MessageProps>(
       if (typeof content === "string") return content;
       return content.map((item) => item.text ?? "").join("");
     }, [content]);
+
+    const toolStatusMessage = getToolStatusMessage(message, isLoading);
+    const hasToolError = message.actionType === "tool_call" && message.error;
 
     return (
       <div
@@ -120,17 +149,18 @@ const Message = React.forwardRef<HTMLDivElement, MessageProps>(
                   </span>
                 ))
               )}
-              {message.actionType === "tool_call" &&
-                message.component?.statusMessage && (
-                  <div className="text-xs ml-2 mt-2 text-muted-foreground flex items-center gap-1">
-                    {message.component.statusMessage}
-                    {isFinalMessage ? (
-                      <Loader2 className="w-3 h-3 animate-spin" />
-                    ) : (
-                      <Check className="w-3 h-3 text-emerald-500" />
-                    )}
-                  </div>
-                )}
+              {toolStatusMessage && (
+                <div className="flex items-center gap-2 text-xs opacity-50 mt-2">
+                  {hasToolError ? (
+                    <X className="w-3 h-3 text-bold text-red-500" />
+                  ) : isLoading ? (
+                    <Loader2 className="w-3 h-3 text-muted-foreground text-bold animate-spin" />
+                  ) : (
+                    <Check className="w-3 h-3 text-bold text-green-500" />
+                  )}
+                  <span>{toolStatusMessage}</span>
+                </div>
+              )}
               {isLoading && role === "assistant" && !content && (
                 <div className="flex items-center gap-1 h-4 p-1 mt-1">
                   <span className="w-1 h-1 bg-current rounded-full animate-bounce [animation-delay:-0.3s]"></span>
