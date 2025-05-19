@@ -11,7 +11,7 @@
   },
   "dependencies": {
     "@modelcontextprotocol/sdk": "^1.10.2",
-    "@tambo-ai/react": "^0.23.1",
+    "@tambo-ai/react": "^0.26.0",
     "@tanstack/react-query": "^5.75.7",
     "@types/cors": "^2.8.17",
     "@types/express": "^5.0.1",
