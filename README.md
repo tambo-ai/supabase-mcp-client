@@ -113,4 +113,8 @@ Update the `components` array with any component(s) you want Tambo to be able to
 
 You can find more information about the component registration options [here.](https://tambo.co/docs/concepts/registering-components)
 
+### Limit the number of rows returned by `execute_sql`
+
+The number of rows returned by a query affects how long the table component takes to generate. The default row limit returned by a query in a Supabase project is 1000, but you can change the `Max rows` setting in your Supabase dashboard under `Project Settings` under `Data API`.
+
 #
