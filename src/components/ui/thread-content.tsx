@@ -35,9 +35,9 @@ export interface ThreadContentProps
 
 const ThreadContent = React.forwardRef<HTMLDivElement, ThreadContentProps>(
   ({ className, variant, ...props }, ref) => {
-    const { thread, generationStage } = useTambo();
+    const { thread, isIdle } = useTambo();
     const messages = thread?.messages ?? [];
-    const isGenerating = generationStage === "STREAMING_RESPONSE";
+    const isGenerating = !isIdle;
 
     return (
       <div
